@@ -1,0 +1,47 @@
+SELECT CASE
+           WHEN m1 = 1 THEN "01 - Jan"
+           WHEN m1 = 2 THEN "02 - Feb"
+           WHEN m1 = 3 THEN "03 - Mar"
+           WHEN m1 = 4 THEN "04 - Apr"
+           WHEN m1 = 5 THEN "05 - May"
+           WHEN m1 = 6 THEN "06 - Jun"
+           WHEN m1 = 7 THEN "07 - Jul"
+           WHEN m1 = 8 THEN "08 - Aug"
+           WHEN m1 = 9 THEN "09 - Sep"
+           WHEN m1 = 10 THEN "10 - Oct"
+           WHEN m1 = 11 THEN "11 - Nov"
+           ELSE "12 - Dec"
+       END AS Mth__filter,
+       Publishers as Publishers__filter,
+       SOURCE,
+       sum(Imps1) AS Imps_Orig,
+       sum(Rev_CAD1) AS Rev_CAD,
+       sum(Rev_USD1) AS Rev_USD
+FROM
+  (SELECT month(date(TransactionDate)) AS M1,
+          APNXAccountName AS Publishers,
+          SUM(Total_Impressions) AS Imps1,
+          SUM(REVS_CPMCPC_CAD_Final) AS Rev_CAD1,
+          sum(REVS_CPMCPC_USD_Final) AS Rev_USD1,
+          CASE
+              WHEN lower(advertiser) LIKE "%bidding%" THEN "Remnants"
+              WHEN lower(advertiser) LIKE "%advertising.com%" THEN "Remnants"
+              WHEN lower(advertiser) LIKE "%convert%" THEN "Remnants"
+              WHEN lower(advertiser) LIKE "google adx" THEN "Remnants"
+              WHEN lower(advertiser) LIKE "journal metro" THEN "Bundle"
+              WHEN lower(advertiser) LIKE "%openx%" THEN "Remnants"
+              WHEN lower(advertiser) LIKE "redux media inc." THEN "Remnants (unsold)"
+              WHEN lower(advertiser) LIKE "transcontinental atlantic media group g.p." THEN "Bundle"
+              WHEN lower(advertiser) LIKE "transcontinental media senc" THEN "Bundle"
+              WHEN lower(advertiser) LIKE "tribal fusion" THEN "Remnants"
+              WHEN lower(advertiser) LIKE "-" THEN "Remnants"
+              ELSE tccampsrc
+          END AS SOURCE
+   FROM (TABLE_DATE_RANGE([ManagedServicesProcessed.APNXDFP_], TIMESTAMP('2016-06-01'), TIMESTAMP('2016-12-31')))
+   GROUP BY Publishers,
+            M1,
+            SOURCE)
+GROUP BY Publishers__filter,
+         Mth__filter,
+         SOURCE
+ORDER BY Mth__filter ASC, Rev_CAD DESC
