@@ -19,11 +19,11 @@ SELECT CASE
 FROM
 
 (SELECT 
- month(date(TransactionDate)) AS M1,
- date(TransactionDate) AS Day,
+ month(date(Transaction_Date)) AS M1,
+ date(Transaction_Date) AS Day,
  SUM(IMPS_Final) AS Imps1,
-       SUM(REVS_CPMCPC_CAD_Final) AS Rev_CAD1,
-       sum(REVS_CPMCPC_USD_Final) as Rev_USD1
+       SUM(Revs_CPMCPC_CAD_Final) AS Rev_CAD1,
+       sum(Revs_CPMCPC_USD_Final) as Rev_USD1
 FROM (TABLE_DATE_RANGE([ManagedServicesProcessed.APNXDFP_], TIMESTAMP('2016-06-01'), TIMESTAMP('2016-12-31')))
  Group by Day, M1)
 
