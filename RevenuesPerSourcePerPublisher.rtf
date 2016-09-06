@@ -18,11 +18,11 @@ SELECT CASE
        sum(Rev_CAD1) AS Rev_CAD,
        sum(Rev_USD1) AS Rev_USD
 FROM
-  (SELECT month(date(TransactionDate)) AS M1,
-          APNXAccountName AS Publishers,
+  (SELECT month(date(Transaction_Date)) AS M1,
+          Account_Name AS Publishers,
           SUM(Total_Impressions) AS Imps1,
-          SUM(REVS_CPMCPC_CAD_Final) AS Rev_CAD1,
-          sum(REVS_CPMCPC_USD_Final) AS Rev_USD1,
+          SUM(Revs_CPMCPC_CAD_Final) AS Rev_CAD1,
+          sum(Revs_CPMCPC_USD_Final) AS Rev_USD1,
           CASE
               WHEN lower(advertiser) LIKE "%bidding%" THEN "Remnants"
               WHEN lower(advertiser) LIKE "%advertising.com%" THEN "Remnants"
@@ -35,7 +35,7 @@ FROM
               WHEN lower(advertiser) LIKE "transcontinental media senc" THEN "Bundle"
               WHEN lower(advertiser) LIKE "tribal fusion" THEN "Remnants"
               WHEN lower(advertiser) LIKE "-" THEN "Remnants"
-              ELSE tccampsrc
+              ELSE Campaign_Source
           END AS SOURCE
    FROM (TABLE_DATE_RANGE([ManagedServicesProcessed.APNXDFP_], TIMESTAMP('2016-06-01'), TIMESTAMP('2016-12-31')))
    GROUP BY Publishers,
