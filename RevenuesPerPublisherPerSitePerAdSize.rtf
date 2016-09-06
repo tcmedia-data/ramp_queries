@@ -14,26 +14,26 @@ SELECT CASE
        END AS Mth__filter,
        Publishers AS Publishers__filter,
        Site AS Site__filter,
-       Creative_Size AS Ad_Size,
+       Creative_Size_Final AS Ad_Size,
        sum(Imps1) AS Imps,
        sum(clicks1) AS Clicks,
        sum(IF (imps1 == 0 , 0, clicks1 * 100 / Imps1)) AS CTR,
        sum(Rev_CAD1) AS Rev_CAD,
        sum(Rev_USD1) AS Rev_USD
 FROM
-  (SELECT month(date(TransactionDate)) AS M1,
-          APNXAccountName AS Publishers,
+  (SELECT month(date(Transaction_Date)) AS M1,
+          Account_Name AS Publishers,
           Site,
-          Creative_Size,
-          SUM(IMPS_Final) AS Imps1,
-          SUM(REVS_CPMCPC_CAD_Final) AS Rev_CAD1,
-          sum(REVS_CPMCPC_USD_Final) AS Rev_USD1,
+          Creative_Size_Final,
+          SUM(Imps_Final) AS Imps1,
+          SUM(Revs_CPMCPC_CAD_Final) AS Rev_CAD1,
+          sum(Revs_CPMCPC_USD_Final) AS Rev_USD1,
           Sum(Total_Clicks) AS Clicks1
    FROM (TABLE_DATE_RANGE([ManagedServicesProcessed.APNXDFP_], TIMESTAMP('2016-06-01'), TIMESTAMP('2016-12-31')))
    GROUP BY Publishers,
             site,
             M1,
-            Creative_Size)
+            Creative_Size_Final)
 GROUP BY Publishers__filter,
          site__filter,
          Mth__filter,
