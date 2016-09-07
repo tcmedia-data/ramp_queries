@@ -1,0 +1,31 @@
+SELECT CASE
+           WHEN m1 = 1 THEN "01 - Jan"
+           WHEN m1 = 2 THEN "02 - Feb"
+           WHEN m1 = 3 THEN "03 - Mar"
+           WHEN m1 = 4 THEN "04 - Apr"
+           WHEN m1 = 5 THEN "05 - May"
+           WHEN m1 = 6 THEN "06 - Jun"
+           WHEN m1 = 7 THEN "07 - Jul"
+           WHEN m1 = 8 THEN "08 - Aug"
+           WHEN m1 = 9 THEN "09 - Sep"
+           WHEN m1 = 10 THEN "10 - Oct"
+           WHEN m1 = 11 THEN "11 - Nov"
+           ELSE "12 - Dec"
+       END AS Mth,
+       day( Dy ) as Day_Of_Month,
+	   sum(Imps1) as Imps,
+       sum(Rev_CAD1) as Rev_CAD,
+       sum(Rev_USD1) as Rev_USD
+FROM
+
+(SELECT 
+ month(date(Transaction_Date)) AS M1,
+ date(Transaction_Date) AS Dy,
+ SUM(IMPS_Final) AS Imps1,
+       SUM(REVS_CPMCPC_CAD_Final) AS Rev_CAD1,
+       sum(REVS_CPMCPC_USD_Final) as Rev_USD1
+FROM (TABLE_DATE_RANGE([ManagedServicesProcessed.APNXDFP_], TIMESTAMP('2016-06-01'), TIMESTAMP('2016-12-31')))
+ Group by Dy, M1)
+
+GROUP BY Mth, Day_Of_Month
+ORDER BY Mth asc, Day_Of_Month asc
