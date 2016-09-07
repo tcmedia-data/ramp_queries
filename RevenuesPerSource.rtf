@@ -17,7 +17,7 @@ SELECT CASE
        sum(Rev_CAD1) AS Rev_CAD,
        sum(Rev_USD1) AS Rev_USD
 FROM
-  (SELECT month(date(TransactionDate)) AS M1,
+  (SELECT month(date(Transaction_Date)) AS M1,
           SUM(Total_Impressions) AS Imps1,
           SUM(Revs_CPMCPC_CAD_Final) AS Rev_CAD1,
           sum(Revs_CPMCPC_USD_Final) AS Rev_USD1,
